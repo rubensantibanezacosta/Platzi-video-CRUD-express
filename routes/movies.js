@@ -1,73 +1,97 @@
 const express = require("express");
-const {moviesMock}=require("../utils/mocks/movies");
+const MoviesService = require("../services/movies");
+const {
+    movieIdSchema,
+    createMovieSchema,
+    updateMovieSchema
+} = require("../utils/schemas/movies");
+const validationHandler = require("../utils/middleware/validationHandler");
 
-function moviesApi(app){
-    const router = express.Router();
-    app.use("/api/movies",router);
 
-    router.get("/", async function(req, res, next){
-        try{
-            const movies = await Promise.resolve(moviesMock);
+function moviesApi(app) {
+    const router = express.Router({
+        caseSensitive: app.get('case sensitive routing'),
+        strict: app.get('strict routing')
+    });
+    app.use("/api/movies/", router);
+
+    const moviesService = new MoviesService();
+
+    router.get("/", async function (req, res, next) {
+        const { tags } = req.query;
+
+
+        try {
+            const movies = await moviesService.getMovies({ tags });
 
             res.status(200).json({
-                data:movies,
+                data: movies,
                 message: "movies listed"
             })
-        }catch(err){
+        } catch (err) {
             next(err);
         }
     });
 
-    router.get("/:movieId", async function(req, res, next){
-        try{
-            const movies = await Promise.resolve(moviesMock[0]);
+    router.get('/:MovieId', validationHandler({ MovieId: movieIdSchema }, "params"), async function (req, res, next) {
+        const MovieId = req.params.MovieId.toString();
+
+        try {
+            const movies = await moviesService.getMovie(MovieId);
 
             res.status(200).json({
-                data:movies,
+                data: movies,
                 message: "movie retrieved"
             })
-        }catch(err){
+        } catch (err) {
             next(err);
         }
     });
 
-    router.post("/", async function(req, res, next){
-        try{
-            const createdMovieId = await Promise.resolve(moviesMock[0].id);
+    router.post("/", validationHandler(createMovieSchema), async function (req, res, next) {
+        const { body: movie } = req;
+        try {
+            const createdMovieId = await moviesService.createMovie({ movie });
 
             res.status(201).json({
-                data:createdMovieId,
+                data: createdMovieId,
                 message: "movie created"
             })
-        }catch(err){
+        } catch (err) {
             next(err);
         }
     });
 
-    router.put("/:movieId", async function(req, res, next){
-        try{
-            const updatedMovieId = await Promise.resolve(moviesMock[0].id);
+    router.put("/:MovieId", validationHandler({ MovieId: movieIdSchema }, "params"), validationHandler(updateMovieSchema), async function (req, res, next) {
+        const { body: movie } = req;
+        const MovieId = req.params.MovieId.toString();
+        console.log(MovieId);
+        console.log(movie);
+        try {
+            const updatedMovieId = await moviesService.updateMovie(MovieId, { movie });
 
             res.status(200).json({
-                data:updatedMovieId,
+                data: updatedMovieId,
                 message: "movie updated"
             })
-        }catch(err){
+        } catch (err) {
             next(err);
         }
     });
-    router.delete("/:movieId", async function(req, res, next){
-        try{
-            const deletedMovieId = await Promise.resolve(moviesMock[0].id);
+    router.delete("/:MovieId", validationHandler({ MovieId: movieIdSchema }, "params"), async function (req, res, next) {
+        const movieId = req.params.MovieId.toString();
+        try {
+            const deletedMovieId = await moviesService.deleteMovie(movieId);
 
             res.status(200).json({
-                data:deletedMovieId,
+                data: deletedMovieId,
                 message: "movie deleted"
             })
-        }catch(err){
+        } catch (err) {
             next(err);
         }
     });
+
 
 }
 
