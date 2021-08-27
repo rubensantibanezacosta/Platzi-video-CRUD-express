@@ -19,6 +19,24 @@ const moviesMock = [{ "id": "574204d7-e801-472b-9a3d-58ec6bb2bc1d", "title": "Pi
 { "id": "4fd72dc3-5999-46d4-b2fc-fd9023149e49", "title": "Killing of John Lennon, The", "year": 2003, "cover": "http://dummyimage.com/224x100.png/dddddd/000000", "description": 1967, "duration": "76.239.96.35", "contentRating": "PG", "source": "http://devhub.com/sapien/sapien/non/mi/integer/ac/neque.aspx?turpis=vulputate&eget=nonummy&elit=maecenas&sodales=tincidunt&scelerisque=lacus&mauris=at&sit=velit&amet=vivamus&eros=vel&suspendisse=nulla&accumsan=eget&tortor=eros&quis=elementum&turpis=pellentesque&sed=quisque&ante=porta&vivamus=volutpat&tortor=erat&duis=quisque&mattis=erat&egestas=eros&metus=viverra&aenean=eget&fermentum=congue&donec=eget&ut=semper&mauris=rutrum&eget=nulla&massa=nunc&tempor=purus&convallis=phasellus&nulla=in&neque=felis&libero=donec&convallis=semper&eget=sapien&eleifend=a&luctus=libero&ultricies=nam&eu=dui&nibh=proin&quisque=leo&id=odio&justo=porttitor", "tags": "Drama" },
 { "id": "7b4c7878-bc9b-4cc0-9f12-0ecab14d7c20", "title": "Sword in the Stone, The", "year": 1996, "cover": "http://dummyimage.com/179x100.png/dddddd/000000", "description": 2029, "duration": "249.138.175.221", "contentRating": "PG", "source": "http://51.la/risus/dapibus/augue.aspx?et=ligula&ultrices=suspendisse&posuere=ornare&cubilia=consequat&curae=lectus&duis=in&faucibus=est&accumsan=risus&odio=auctor&curabitur=sed&convallis=tristique&duis=in&consequat=tempus&dui=sit&nec=amet&nisi=sem&volutpat=fusce&eleifend=consequat&donec=nulla&ut=nisl&dolor=nunc&morbi=nisl&vel=duis&lectus=bibendum&in=felis&quam=sed&fringilla=interdum&rhoncus=venenatis&mauris=turpis&enim=enim&leo=blandit&rhoncus=mi&sed=in&vestibulum=porttitor&sit=pede&amet=justo&cursus=eu&id=massa&turpis=donec&integer=dapibus&aliquet=duis&massa=at&id=velit&lobortis=eu&convallis=est&tortor=congue&risus=elementum&dapibus=in&augue=hac&vel=habitasse&accumsan=platea&tellus=dictumst&nisi=morbi&eu=vestibulum&orci=velit&mauris=id&lacinia=pretium&sapien=iaculis&quis=diam&libero=erat&nullam=fermentum&sit=justo&amet=nec&turpis=condimentum&elementum=neque&ligula=sapien&vehicula=placerat&consequat=ante&morbi=nulla&a=justo&ipsum=aliquam&integer=quis&a=turpis&nibh=eget&in=elit&quis=sodales&justo=scelerisque&maecenas=mauris&rhoncus=sit&aliquam=amet&lacus=eros&morbi=suspendisse&quis=accumsan&tortor=tortor&id=quis&nulla=turpis&ultrices=sed&aliquet=ante&maecenas=vivamus&leo=tortor&odio=duis&condimentum=mattis&id=egestas&luctus=metus&nec=aenean&molestie=fermentum&sed=donec&justo=ut&pellentesque=mauris&viverra=eget", "tags": "Animation|Children|Fantasy|Musical" }];
 
+
+//testing
+function filteredMoviesMock(tag){
+    return moviesMock.filter(movie => movie.tags.includes(tag));
+}
+
+class MoviesServiceMock {
+    async getMovies(){
+        return Promise.resolve(moviesMock);
+    }
+
+    async createMovie(){
+        return Promise.resolve(moviesMock[0]);
+    }
+}
+
 module.exports = {
     moviesMock,
+    filteredMoviesMock,
+    MoviesServiceMock
 }
